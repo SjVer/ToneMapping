@@ -20,19 +20,19 @@ float3 tonemap(int func, float3 color)
     case NONE:
         return color;
     case REINHARD:
-        return tm_reinhard(color);
+        return tmo_reinhard(color);
     case EXTENDED_REINHARD:
-        return tm_extended_reinhard(color, 3.5f);
+        return tmo_extended_reinhard(color, 3.5f);
     case EXTENDED_REINHARD_LUMINANCE:
-        return tm_extended_reinhard_lumincance(color, 3.5f);
+        return tmo_extended_reinhard_lum(color, 3.5f);
     case REINHARD_JODIE:
-        return tm_reinhard_jodie(color);
+        return tmo_reinhard_jodie(color);
     case UNCHARTED2_FILMIC:
-        return tm_uncharted2_filmic(color);
+        return tmo_uncharted2_filmic(color);
     case ACES_FITTED:
-        return tm_aces_fitted(color);
+        return tmo_aces_fitted(color);
     case ACES_APPROXIMATED:
-        return tm_aces_approximated(color);
+        return tmo_aces_approximated(color);
     }
 }
 

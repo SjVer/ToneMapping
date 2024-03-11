@@ -42,7 +42,7 @@ const char *tonemap_function_name(int fn)
     case EXTENDED_REINHARD:
         return "extended-reinhard";
     case EXTENDED_REINHARD_LUMINANCE:
-        return "extended-reinhard-luminance";
+        return "extended-reinhard-lum";
     case REINHARD_JODIE:
         return "reinhard-jodie";
     case UNCHARTED2_FILMIC:
@@ -56,18 +56,18 @@ const char *tonemap_function_name(int fn)
 
 // ========== tonemap functions ==========
 
-float3 tm_reinhard(float3 v)
+float3 tmo_reinhard(float3 v)
 {
     return v / (1.0f + v);
 }
 
-float3 tm_extended_reinhard(float3 v, float max_white)
+float3 tmo_extended_reinhard(float3 v, float max_white)
 {
     float3 numerator = v * (1.0f + (v / (max_white * max_white)));
     return numerator / (1.0f + v);
 }
 
-float3 tm_extended_reinhard_lumincance(float3 v, float max_luminance)
+float3 tmo_extended_reinhard_lum(float3 v, float max_luminance)
 {
     float l_old = luminance(v);
     float numerator = l_old * (1.0f + (l_old / (max_luminance * max_luminance)));
@@ -75,13 +75,13 @@ float3 tm_extended_reinhard_lumincance(float3 v, float max_luminance)
     return change_luminance(v, l_new);
 }
 
-float3 tm_reinhard_jodie(float3 v)
+float3 tmo_reinhard_jodie(float3 v)
 {
     float3 t = v / (1.0f + v);
     return lerp(v / (1.0f + luminance(v)), t, t);
 }
 
-float3 uncharted2_tm_partial(float3 x)
+float3 uncharted2_tmo_partial(float3 x)
 {
     float A = 0.15f;
     float B = 0.50f;
@@ -92,13 +92,13 @@ float3 uncharted2_tm_partial(float3 x)
     return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
 }
 
-float3 tm_uncharted2_filmic(float3 v)
+float3 tmo_uncharted2_filmic(float3 v)
 {
     float exposure_bias = 2.0f;
-    float3 curr = uncharted2_tm_partial(v * exposure_bias);
+    float3 curr = uncharted2_tmo_partial(v * exposure_bias);
 
     float3 W = float3(11.2f);
-    float3 white_scale = float3(1.0f) / uncharted2_tm_partial(W);
+    float3 white_scale = float3(1.0f) / uncharted2_tmo_partial(W);
     return curr * white_scale;
 }
 
@@ -129,14 +129,14 @@ float3 aces_rtt_and_odt_fit(float3 v)
     return a / b;
 }
 
-float3 tm_aces_fitted(float3 v)
+float3 tmo_aces_fitted(float3 v)
 {
     v = aces_mul(aces_input_matrix, v);
     v = aces_rtt_and_odt_fit(v);
     return aces_mul(aces_output_matrix, v);
 }
 
-float3 tm_aces_approximated(float3 v)
+float3 tmo_aces_approximated(float3 v)
 {
     v = v * 0.6f;
     float a = 2.51f;
