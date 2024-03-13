@@ -46,7 +46,7 @@ const char *tonemap_function_name(int fn)
     case REINHARD_JODIE:
         return "reinhard-jodie";
     case UNCHARTED2_FILMIC:
-        return "uncharted2-filmic";
+        return "hable-filmic";
     case ACES_FITTED:
         return "aces-fitted";
     case ACES_APPROXIMATED:
@@ -81,7 +81,7 @@ float3 tmo_reinhard_jodie(float3 v)
     return lerp(v / (1.0f + luminance(v)), t, t);
 }
 
-float3 uncharted2_tmo_partial(float3 x)
+float3 hable_tmo_partial(float3 x)
 {
     float A = 0.15f;
     float B = 0.50f;
@@ -92,13 +92,13 @@ float3 uncharted2_tmo_partial(float3 x)
     return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
 }
 
-float3 tmo_uncharted2_filmic(float3 v)
+float3 tmo_hable_filmic(float3 v)
 {
-    float exposure_bias = 2.0f;
-    float3 curr = uncharted2_tmo_partial(v * exposure_bias);
+    float exposure_bias = 1.5f;
+    float3 curr = hable_tmo_partial(v * exposure_bias);
 
     float3 W = float3(11.2f);
-    float3 white_scale = float3(1.0f) / uncharted2_tmo_partial(W);
+    float3 white_scale = float3(1.0f) / hable_tmo_partial(W);
     return curr * white_scale;
 }
 

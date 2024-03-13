@@ -28,7 +28,7 @@ float3 tonemap(int func, float3 color)
     case REINHARD_JODIE:
         return tmo_reinhard_jodie(color);
     case UNCHARTED2_FILMIC:
-        return tmo_uncharted2_filmic(color);
+        return tmo_hable_filmic(color);
     case ACES_FITTED:
         return tmo_aces_fitted(color);
     case ACES_APPROXIMATED:
