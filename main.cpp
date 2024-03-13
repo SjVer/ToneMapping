@@ -28,7 +28,7 @@ float3 tonemap(int func, float3 color)
     case REINHARD_JODIE:
         return tmo_reinhard_jodie(color);
     case UNCHARTED2_FILMIC:
-        return tmo_uncharted2_filmic(color);
+        return tmo_hable_filmic(color);
     case ACES_FITTED:
         return tmo_aces_fitted(color);
     case ACES_APPROXIMATED:
@@ -57,6 +57,7 @@ void main()
     {
 
         // process image
+        #pragma omp parallel for schedule(dynamic)
         for (int i = 0; i < width * height; i++)
         {
             float3 color = float3(img[i * CHANNELS], img[i * CHANNELS + 1], img[i * CHANNELS + 2]);
